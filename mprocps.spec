@@ -1,17 +1,15 @@
-# $Revision: 1.3 $Date: 2001-05-02 21:51:24 $
-%define 	mprocps_version	1.01-1.2.9
-%define		package_version	1.01_1.2.9
+# $Revision: 1.4 $Date: 2001-09-19 22:29:07 $
 
 Summary:	Multicomputer process monitoring utilities
 Summary(pl):	Narzêdzia do monitorowania procesów w ¶rodowisku MOSIX
 Name:		mprocps
-Version:	%{package_version}
+Version:	1.01_1.2.9
 Release:	1
 License:	GPL
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{%{name}_version}.tar.gz
+Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{name}-%{version}.tar.gz
 Patch0:		%{name}-make.patch
 ExclusiveArch:	%{ix86}
 Requires:	mosix-utils
