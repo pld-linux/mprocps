@@ -1,4 +1,4 @@
-# $Revision: 1.6 $Date: 2001-10-08 09:58:42 $
+# $Revision: 1.7 $Date: 2001-12-06 15:28:37 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
@@ -23,6 +23,11 @@ A package of utilities which report on the state of the system,
 including the states of running processes, amount of memory available,
 and currently-logged-in users on a Mosix multicomputer system.
 
+%description -l pl
+Pakiet narzêdzi raportuj±cych stan systemu, tym stany dzia³aj±cych
+procesów, ilo¶ci wolnej pamiêci, zalogowanych u¿ytkowników na systemie
+wielokomputerowym MOSIX.
+
 %package X11
 Summary:	X-based process monitoring utilities
 Summary(pl):	Narzêdzia pod X Window do monitorowania procesów MOSIX
@@ -33,7 +38,12 @@ Group(pl):	X11/Aplikacje
 %description X11
 A package of X-based utilities which report on the state of the
 system. These utilities generally provide graphical presentations of
-information available from tools in the procps suite.
+information available from tools in the mprocps suite.
+
+%description X11 -l pl
+Pakiet narzêdzi pod X Window System raportuj±cych stan systemu. Daj±
+one graficzn± prezentacjê informacji dostêpnych z narzêdzi z pakietu
+mprocps.
 
 %prep
 %setup -q -n mproc-1.0.1-1.2.9
@@ -54,6 +64,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/X11/wmconfig
 install mtop.wmconfig $RPM_BUILD_ROOT%{_sysconfdir}/X11/wmconfig/mtop
 
+gzip -9nf NEWS BUGS TODO
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -65,15 +77,14 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%doc NEWS.gz BUGS.gz TODO.gz
 %attr(755,root,root) /bin/mps
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_mandir}/man1/msnice.1
-
 %config(missingok) %{_sysconfdir}/X11/wmconfig/mtop
-%doc NEWS BUGS TODO
 %{_mandir}/man1/mps.1*
-%{_mandir}/man1/mtop.1*
 %{_mandir}/man1/mskill.1*
+%{_mandir}/man1/msnice.1*
+%{_mandir}/man1/mtop.1*
 
 %files X11
 %defattr(644,root,root,755)
