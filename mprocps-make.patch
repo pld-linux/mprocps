@@ -1,0 +1,336 @@
+diff -Nur mproc-1.0.1-1.2.9.orig/Makefile mproc-1.0.1-1.2.9/Makefile
+--- mproc-1.0.1-1.2.9.orig/Makefile	Tue Jun 15 17:50:39 1999
++++ mproc-1.0.1-1.2.9/Makefile	Tue Oct 10 10:21:32 2000
+@@ -3,17 +3,18 @@
+ 
+ PREFIX     =  #proc# prefix for program names
+ DESTDIR = /
+-MAN1DIR    =  ${DESTDIR}/usr/man/man1
+-MAN8DIR    =  ${DESTDIR}/usr/man/man8
++MANDIR	   =  /usr/share/man
++MAN1DIR    =  ${DESTDIR}${MANDIR}/man1
+ BINDIR     =  ${DESTDIR}/bin
+ SBINDIR    =  ${DESTDIR}/usr/sbin
+ USRBINDIR  =  ${DESTDIR}/usr/bin
+-INSTALLBIN =  install --mode a=rx --strip
+-INSTALLMAN =  install --mode a=r
++INSTALLBIN =  install
++INSTALLMAN =  install
+ 
+ BPROG      =  mps #						-> BINDIR
+ UPROG      =  mtop # -> USRBINDIR
+-MAN1       =  mps.1 mtop.1 sessreg.1 watch.1
++#MAN1       =  mps.1 mtop.1 sessreg.1 watch.1
++MAN1       =  mps.1 mtop.1
+ MAN8       =  vmstat.8 # psupdate.8
+ 
+ SUBDIRS    =  skill xproc # sub-packages to build/install
+@@ -60,11 +61,16 @@
+ 	  [ -f $$dir/Imakefile ] && (cd $$dir; xmkmf) ; done
+ 
+ # INSTALL PROGRAMS + DOCS
+-install: $(patsubst %,install_%,$(BUILD) $(MAN1) $(MAN8))
++install: dirinstall $(patsubst %,install_%,$(BUILD) $(MAN1))
+ ifeq ($(SHARED),1)
+-	install --mode a=rx $(LIB_TGT) $(SHLIBDIR)
++	install $(LIB_TGT) $(SHLIBDIR)
+ endif
+ 
++dirinstall:
++	install -d ${DESTDIR}/bin
++	install -d ${DESTDIR}/usr/bin
++	install -d ${DESTDIR}${MANDIR}/man1
++
+ # INSTALL LIBRARIES + HEADERS (OPTIONAL)
+ libinstall:
+ 	$(MAKE) -C proc install $(LIBPROCPASS)
+@@ -134,10 +140,10 @@
+ # static pattern build/link rules:
+ 
+ %.o : %.c
+-	$(strip $(CC) $(CFLAGS) -c $^)
++	$(CC) $(CFLAGS) -c $^
+ 
+ mps : % : %.o
+-	$(strip $(CC) $(LDFLAGS) -o $@ $< $(LIB_TGT) $(EXTRALIBS))
++	$(CC) $(LDFLAGS) -o $@ $< $(LIB_TGT) $(EXTRALIBS)
+ 
+ 
+ # special instances of link rules (need extra libraries/objects)
+@@ -154,25 +160,25 @@
+ endif
+ 
+ mtop:   % : %.o
+-	$(strip $(CC)  $(LDFLAGS) -o $@ $^ $(LIB_TGT) $(LIBTERMCAP) $(EXTRALIBS))
++	$(CC)  $(LDFLAGS) -o $@ $^ $(LIB_TGT) $(LIBTERMCAP) $(EXTRALIBS)
+ 
+ 
+ # special instances of compile rules (need extra defines)
+ 
+ mtop.o:	mtop.c
+-	$(strip $(CC) $(CFLAGS) -fwritable-strings -c $<)
++	$(CC) $(CFLAGS) -fwritable-strings -c $<
+ 
+-sessreg.o:	sessreg.c
+-	$(strip $(CC) $(CFLAGS) -DSYSV -c $<)
++#sessreg.o:	sessreg.c
++#	$(CC) $(CFLAGS) -DSYSV -c $<
+ 
+ bfdupdate.o:	bfdupdate.c
+-	$(strip $(CC) $(CFLAGS) $(BFD_CAPABLE) -c $<)
++	$(CC) $(CFLAGS) $(BFD_CAPABLE) -c $<
+ 
+ elfupdate.o:	elfupdate.c
+-	$(strip $(CC) $(CFLAGS) $(ELF_CAPABLE) -c $<)
++	$(CC) $(CFLAGS) $(ELF_CAPABLE) -c $<
+ 
+ aoutupdate.o:	aoutupdate.c
+-	$(strip $(CC) $(CFLAGS) $(AOUT_CAPABLE) -c $<)
++	$(CC) $(CFLAGS) $(AOUT_CAPABLE) -c $<
+ 
+ 
+ # static pattern installation rules
+diff -Nur mproc-1.0.1-1.2.9.orig/Makefile~ mproc-1.0.1-1.2.9/Makefile~
+--- mproc-1.0.1-1.2.9.orig/Makefile~	Thu Jan  1 01:00:00 1970
++++ mproc-1.0.1-1.2.9/Makefile~	Tue Jun 15 17:50:39 1999
+@@ -0,0 +1,194 @@
++# Makefile for procps.  Chuck Blake.
++# Portions of this are highly dependent upon features specific to GNU make
++
++PREFIX     =  #proc# prefix for program names
++DESTDIR = /
++MAN1DIR    =  ${DESTDIR}/usr/man/man1
++MAN8DIR    =  ${DESTDIR}/usr/man/man8
++BINDIR     =  ${DESTDIR}/bin
++SBINDIR    =  ${DESTDIR}/usr/sbin
++USRBINDIR  =  ${DESTDIR}/usr/bin
++INSTALLBIN =  install --mode a=rx --strip
++INSTALLMAN =  install --mode a=r
++
++BPROG      =  mps #						-> BINDIR
++UPROG      =  mtop # -> USRBINDIR
++MAN1       =  mps.1 mtop.1 sessreg.1 watch.1
++MAN8       =  vmstat.8 # psupdate.8
++
++SUBDIRS    =  skill xproc # sub-packages to build/install
++
++# easy to command-line override
++INCDIRS    =  -I/usr/include/ncurses -I/usr/X11R6/include
++#OPT        = -O3
++OPT        = -g
++CC         =  gcc #-ggdb
++CFLAGS     =  -D_GNU_SOURCE $(OPT) -I. $(INCDIRS) -Wall -Wno-unused
++#SHARED     =  1# build/install both a static and ELF shared library
++SHARED     =  0
++SHLIBDIR   =  ${DESTDIR}/lib# where to install the shared library
++
++LDFLAGS    =  -Wl,-warn-common #-s	recommended for ELF systems
++#LDFLAGS    =  -qmagic -s#		recommended for a.out systems
++#LDFLAGS    =  -Xlinker -qmagic -s#	older a.out systems may need this
++#LDFLAGS    =  -N -s#			still older a.out systems use this
++
++BFD_CAPABLE = -DBFD_CAPABLE
++AOUT_CAPABLE = #-DAOUT_CAPABLE 
++ELF_CAPABLE = #-DELF_CAPABLE
++
++LIBBFD = -lbfd -liberty
++LIBCURSES  =  -lncurses# watch is the only thing that needs this
++#LIBCURSES  =  -lcurses -ltermcap# BSD Curses requires termcap
++LIBTERMCAP =  -lncurses# provides perfectly good termcap support
++#LIBTERMCAP =  -ltermcap
++EXTRALIBS  =  # -lshadow
++
++W_SHOWFROM =  -DW_SHOWFROM# show remote host users are logged in from.
++
++#----------------------------------------------------#
++# End of user-configurable portion of the Makefile.  #
++# You should not need to modify anything below this. #
++#----------------------------------------------------#
++BUILD = $(BPROG) $(UPROG) $(SPROG) $(SUBDIRS)
++
++# BUILD LIBRARIES + PROGRAMS
++all: config $(BUILD)
++
++config:
++	for dir in $(SUBDIRS); do \
++	  [ -f $$dir/Imakefile ] && (cd $$dir; xmkmf) ; done
++
++# INSTALL PROGRAMS + DOCS
++install: $(patsubst %,install_%,$(BUILD) $(MAN1) $(MAN8))
++ifeq ($(SHARED),1)
++	install --mode a=rx $(LIB_TGT) $(SHLIBDIR)
++endif
++
++# INSTALL LIBRARIES + HEADERS (OPTIONAL)
++libinstall:
++	$(MAKE) -C proc install $(LIBPROCPASS)
++
++clean:
++	$(RM) -f $(OBJ) $(BPROG) $(UPROG) $(SPROG)
++	for i in proc $(SUBDIRS); do $(MAKE) -C $$i clean; done
++
++distclean: clean
++	for i in proc $(SUBDIRS); do $(MAKE) -C $$i clean; done
++	$(RM) -f $(OBJ) $(BPROG) $(UPROG) $(SPROG) xproc/Makefile* \
++	      proc/signames.h proc/.depend
++
++
++#-----------------------------------------------------#
++# End of user-callable make targets.                  #
++# You should not need to read anything below this.    #
++#-----------------------------------------------------#
++
++.PHONY:	all config install libinstall clean distclean
++.PHONY: $(patsubst %,install_%, $(BPROG) $(UPROG) $(SPROG))
++.PHONY: proc skill xproc
++.PHONY: $(patsubst %,build_%, proc skill xproc)
++.PHONY: $(patsubst %,install_%, proc skill xproc)
++
++VERSION      =  1
++SUBVERSION   =  2
++MINORVERSION =  9
++# Note: LIBVERSION may be less than $(VERSION).$(SUBVERSION).$(MINORVERSION)
++# LIBVERSION is only set to current $(VERSION).$(SUBVERSION).$(MINORVERSION)
++# when an incompatible change is made in libproc.
++LIBVERSION   =  1.2.6
++ifdef MINORVERSION
++LIBPROCPASS  =  SHARED=$(SHARED) SHLIBDIR=$(SHLIBDIR) VERSION=$(VERSION) SUBVERSION=$(SUBVERSION) MINORVERSION=$(MINORVERSION) LIBVERSION=$(LIBVERSION)
++else
++LIBPROCPASS  =  SHARED=$(SHARED) SHLIBDIR=$(SHLIBDIR) VERSION=$(VERSION) SUBVERSION=$(SUBVERSION) LIBVERSION=$(LIBVERSION)
++endif
++
++# libproc setup
++
++ifeq ($(SHARED),1)
++    LIB_TGT = proc/libproc.so.$(LIBVERSION)
++else
++    LIB_TGT = proc/libproc.a
++endif
++
++$(LIB_TGT): $(wildcard proc/*.[ch])
++	$(MAKE) -C proc `basename $(LIB_TGT)` $(LIBPROCPASS)
++
++# component package setup -- the pattern should be obvious: A build rule and
++# unified executable+documentation install rule. (An extra makefile rule is
++# needed for those packages which use Imake.)
++
++skill:              build_skill
++build_skill:				; $(MAKE) -C skill
++install_skill:      skill		; $(MAKE) -C skill install
++
++xproc:              build_xproc
++build_xproc:        xproc/Makefile	; $(MAKE) -C xproc
++install_xproc:      xproc		; $(MAKE) -C xproc install
++xproc/Makefile:     xproc/Imakefile	; cd xproc; xmkmf -a
++
++# executable dependencies
++
++mps mtop : $(LIB_TGT)
++
++# static pattern build/link rules:
++
++%.o : %.c
++	$(strip $(CC) $(CFLAGS) -c $^)
++
++mps : % : %.o
++	$(strip $(CC) $(LDFLAGS) -o $@ $< $(LIB_TGT) $(EXTRALIBS))
++
++
++# special instances of link rules (need extra libraries/objects)
++
++CAPABILITIES =
++ifdef BFD_CAPABLE
++CAPABILITIES += bfdupdate.o
++endif
++ifdef ELF_CAPABLE
++CAPABILITIES += elfupdate.o
++endif
++ifdef AOUT_CAPABLE
++CAPABILITIES += aoutupdate.o
++endif
++
++mtop:   % : %.o
++	$(strip $(CC)  $(LDFLAGS) -o $@ $^ $(LIB_TGT) $(LIBTERMCAP) $(EXTRALIBS))
++
++
++# special instances of compile rules (need extra defines)
++
++mtop.o:	mtop.c
++	$(strip $(CC) $(CFLAGS) -fwritable-strings -c $<)
++
++sessreg.o:	sessreg.c
++	$(strip $(CC) $(CFLAGS) -DSYSV -c $<)
++
++bfdupdate.o:	bfdupdate.c
++	$(strip $(CC) $(CFLAGS) $(BFD_CAPABLE) -c $<)
++
++elfupdate.o:	elfupdate.c
++	$(strip $(CC) $(CFLAGS) $(ELF_CAPABLE) -c $<)
++
++aoutupdate.o:	aoutupdate.c
++	$(strip $(CC) $(CFLAGS) $(AOUT_CAPABLE) -c $<)
++
++
++# static pattern installation rules
++
++$(patsubst %,install_%,$(BPROG)): install_%: %
++	$(INSTALLBIN) $< $(BINDIR)/$(PREFIX)$<
++$(patsubst %,install_%,$(UPROG)): install_%: %
++	$(INSTALLBIN) $< $(USRBINDIR)/$(PREFIX)$<
++$(patsubst %,install_%,$(SPROG)): install_%: %
++	$(INSTALLBIN) $< $(SBINDIR)/$(PREFIX)$<
++$(patsubst %,install_%,$(MAN1)) : install_%: %
++	$(INSTALLMAN) $< $(MAN1DIR)/$(PREFIX)$<
++$(patsubst %,install_%,$(MAN8)) : install_%: %
++	$(INSTALLMAN) $< $(MAN8DIR)/$(PREFIX)$<
++
++# Find all the source and object files in this directory
++
++SRC      =  $(sort $(wildcard *.c))
++OBJ      =  $(SRC:.c=.o)
+diff -Nur mproc-1.0.1-1.2.9.orig/skill/Makefile mproc-1.0.1-1.2.9/skill/Makefile
+--- mproc-1.0.1-1.2.9.orig/skill/Makefile	Fri Oct  2 23:34:08 1998
++++ mproc-1.0.1-1.2.9/skill/Makefile	Tue Oct 10 10:24:08 2000
+@@ -4,12 +4,13 @@
+ # $(DESTDIR)/ is prepended to BINDIR and MANDIR.
+ 
+ # CONFIGURE: Set location of executable, its group and mode.
+-BINDIR=	usr/bin
++BINDIR=	/usr/bin
+ BINGRP=	root
+ BINMOD=	0755
+ 
+ # CONFIGURE: Set location of man directory and man page suffix.
+-MANDIR=	usr/man/man1
++MANDIR=	/usr/share/man
++MAN1DIR= ${MANDIR}/man1
+ MANSFX=	1
+ 
+ # CONFIGURE(Config): Select an OSTYPE for your machine from the list above.
+@@ -42,20 +43,15 @@
+ 
+ install: skill
+ #(SysV)	filepriv -d ${DESTDIR}/${BINDIR}/skill
+-	rm -f ${DESTDIR}/${BINDIR}/skill ${DESTDIR}/${MANDIR}/skill.${MANSFX}
+-	rm -f ${DESTDIR}/${BINDIR}/snice ${DESTDIR}/${MANDIR}/snice.${MANSFX}
++	rm -f ${DESTDIR}${BINDIR}/mskill ${DESTDIR}/${MANDIR}/mskill.1
++	rm -f ${DESTDIR}${BINDIR}/msnice ${DESTDIR}/${MANDIR}/msnice.1
+ #	install -c -g ${BINGRP} -m ${BINMOD} -s skill ${DESTDIR}/${BINDIR}
+-	cp skill ${DESTDIR}/${BINDIR}/skill
+-	strip ${DESTDIR}/${BINDIR}/skill
+-	[ "$$(id -u)" = 0 ] && chgrp ${BINGRP} ${DESTDIR}/${BINDIR}/skill
+-	chmod ${BINMOD} ${DESTDIR}/${BINDIR}/skill
+-	ln ${DESTDIR}/${BINDIR}/skill ${DESTDIR}/${BINDIR}/snice
++	cp skill ${DESTDIR}${BINDIR}/mskill
++	ln -sf ${BINDIR}/mskill ${DESTDIR}${BINDIR}/msnice
+ #(SysV)	filepriv -f dacread ${DESTDIR}/${BINDIR}/skill
+ #	install -c -m 644 skill.1 ${DESTDIR}/${MANDIR}/skill.${MANSFX}
+-	cp skill.1 ${DESTDIR}/${MANDIR}/skill.${MANSFX}
+-	chmod 644 ${DESTDIR}/${MANDIR}/skill.${MANSFX}
+-	ln ${DESTDIR}/${MANDIR}/skill.${MANSFX}\
+-		${DESTDIR}/${MANDIR}/snice.${MANSFX}
++	cp skill.1 ${DESTDIR}/${MAN1DIR}/mskill.1
++	ln -sf ${MAN1DIR}/mskill.1 ${DESTDIR}/${MAN1DIR}/msnice.1
+ 
+ config Config: FRC
+ 	./Config
