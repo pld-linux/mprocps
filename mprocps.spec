@@ -1,4 +1,4 @@
-# $Revision: 1.1 $Date: 2000-10-10 08:22:17 $
+# $Revision: 1.2 $Date: 2000-10-10 08:49:44 $
 %define 	mprocps_version	1.01-1.2.9
 %define		package_version	1.01_1.2.9
 
