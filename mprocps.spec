@@ -1,4 +1,4 @@
-# $Revision: 1.9 $Date: 2002-02-22 23:29:17 $
+# $Revision: 1.10 $Date: 2002-11-27 22:06:23 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
@@ -60,8 +60,6 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/X11/wmconfig
 install mtop.wmconfig $RPM_BUILD_ROOT%{_sysconfdir}/X11/wmconfig/mtop
 
-gzip -9nf NEWS BUGS TODO
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -73,7 +71,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc NEWS.gz BUGS.gz TODO.gz
+%doc NEWS BUGS TODO
 %attr(755,root,root) /bin/mps
 %attr(755,root,root) %{_bindir}/*
 %config(missingok) %{_sysconfdir}/X11/wmconfig/mtop
