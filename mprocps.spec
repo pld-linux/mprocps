@@ -1,5 +1,6 @@
-# $Revision: 1.5 $Date: 2001-09-19 22:35:23 $
+# $Revision: 1.6 $Date: 2001-10-08 09:58:42 $
 
+%define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
 Summary(pl):	Narzêdzia do monitorowania procesów w ¶rodowisku MOSIX
 Name:		mprocps
@@ -9,7 +10,7 @@ License:	GPL
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{version}.tar.gz
+Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{tar_version}.tar.gz
 Patch0:		%{name}-make.patch
 ExclusiveArch:	%{ix86}
 Requires:	mosix-utils
