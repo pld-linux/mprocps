@@ -1,4 +1,4 @@
-# $Revision: 1.4 $Date: 2001-09-19 22:29:07 $
+# $Revision: 1.5 $Date: 2001-09-19 22:35:23 $
 
 Summary:	Multicomputer process monitoring utilities
 Summary(pl):	Narzêdzia do monitorowania procesów w ¶rodowisku MOSIX
@@ -9,7 +9,7 @@ License:	GPL
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{version}.tar.gz
 Patch0:		%{name}-make.patch
 ExclusiveArch:	%{ix86}
 Requires:	mosix-utils
