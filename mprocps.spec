@@ -1,4 +1,4 @@
-# $Revision: 1.11 $Date: 2003-05-25 05:50:50 $
+# $Revision: 1.12 $Date: 2003-05-28 12:59:48 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
@@ -9,6 +9,7 @@ Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{tar_version}.tar.gz
+# Source0-md5:	a1f9a21ed129e823ca78c2c6db78b13c
 Patch0:		%{name}-make.patch
 ExclusiveArch:	%{ix86}
 Requires:	mosix-utils
