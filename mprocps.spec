@@ -1,4 +1,4 @@
-# $Revision: 1.8 $Date: 2002-01-18 02:13:58 $
+# $Revision: 1.9 $Date: 2002-02-22 23:29:17 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
@@ -8,8 +8,6 @@ Version:	1.01_1.2.9
 Release:	1
 License:	GPL
 Group:		Applications/System
-Group(de):	Applikationen/System
-Group(pl):	Aplikacje/System
 Source0:	ftp://ftp.cs.huji.ac.il/users/mosix/contrib/mproc-%{tar_version}.tar.gz
 Patch0:		%{name}-make.patch
 ExclusiveArch:	%{ix86}
@@ -32,8 +30,6 @@ wielokomputerowym MOSIX.
 Summary:	X-based process monitoring utilities
 Summary(pl):	Narzêdzia pod X Window do monitorowania procesów MOSIX
 Group:		X11/Applications
-Group(de):	X11/Applikationen
-Group(pl):	X11/Aplikacje
 
 %description X11
 A package of X-based utilities which report on the state of the
