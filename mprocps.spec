@@ -1,4 +1,4 @@
-# $Revision: 1.12 $Date: 2003-05-28 12:59:48 $
+# $Revision: 1.13 $Date: 2006-08-08 14:38:10 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
@@ -44,7 +44,7 @@ mprocps.
 
 %prep
 %setup -q -n mproc-1.0.1-1.2.9
-%patch -p1
+%patch0 -p1
 
 %build
 PATH=%{_xbindir}:$PATH
