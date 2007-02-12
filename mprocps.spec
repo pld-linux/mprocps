@@ -1,8 +1,8 @@
-# $Revision: 1.13 $Date: 2006-08-08 14:38:10 $
+# $Revision: 1.14 $Date: 2007-02-12 00:49:08 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
-Summary(pl):	Narzêdzia do monitorowania procesów w ¶rodowisku MOSIX
+Summary(pl.UTF-8):   NarzÄ™dzia do monitorowania procesÃ³w w Å›rodowisku MOSIX
 Name:		mprocps
 Version:	1.01_1.2.9
 Release:	1
@@ -22,14 +22,14 @@ A package of utilities which report on the state of the system,
 including the states of running processes, amount of memory available,
 and currently-logged-in users on a Mosix multicomputer system.
 
-%description -l pl
-Pakiet narzêdzi raportuj±cych stan systemu, tym stany dzia³aj±cych
-procesów, ilo¶ci wolnej pamiêci, zalogowanych u¿ytkowników na systemie
+%description -l pl.UTF-8
+Pakiet narzÄ™dzi raportujÄ…cych stan systemu, tym stany dziaÅ‚ajÄ…cych
+procesÃ³w, iloÅ›ci wolnej pamiÄ™ci, zalogowanych uÅ¼ytkownikÃ³w na systemie
 wielokomputerowym MOSIX.
 
 %package X11
 Summary:	X-based process monitoring utilities
-Summary(pl):	Narzêdzia pod X Window do monitorowania procesów MOSIX
+Summary(pl.UTF-8):   NarzÄ™dzia pod X Window do monitorowania procesÃ³w MOSIX
 Group:		X11/Applications
 
 %description X11
@@ -37,9 +37,9 @@ A package of X-based utilities which report on the state of the
 system. These utilities generally provide graphical presentations of
 information available from tools in the mprocps suite.
 
-%description X11 -l pl
-Pakiet narzêdzi pod X Window System raportuj±cych stan systemu. Daj±
-one graficzn± prezentacjê informacji dostêpnych z narzêdzi z pakietu
+%description X11 -l pl.UTF-8
+Pakiet narzÄ™dzi pod X Window System raportujÄ…cych stan systemu. DajÄ…
+one graficznÄ… prezentacjÄ™ informacji dostÄ™pnych z narzÄ™dzi z pakietu
 mprocps.
 
 %prep
