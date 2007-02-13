@@ -1,8 +1,8 @@
-# $Revision: 1.14 $Date: 2007-02-12 00:49:08 $
+# $Revision: 1.15 $Date: 2007-02-13 07:16:48 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
-Summary(pl.UTF-8):   Narzędzia do monitorowania procesów w środowisku MOSIX
+Summary(pl.UTF-8):	Narzędzia do monitorowania procesów w środowisku MOSIX
 Name:		mprocps
 Version:	1.01_1.2.9
 Release:	1
@@ -29,7 +29,7 @@ wielokomputerowym MOSIX.
 
 %package X11
 Summary:	X-based process monitoring utilities
-Summary(pl.UTF-8):   Narzędzia pod X Window do monitorowania procesów MOSIX
+Summary(pl.UTF-8):	Narzędzia pod X Window do monitorowania procesów MOSIX
 Group:		X11/Applications
 
 %description X11
