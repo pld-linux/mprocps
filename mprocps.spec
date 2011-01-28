@@ -1,4 +1,3 @@
-# $Revision: 1.15 $Date: 2007-02-13 07:16:48 $
 
 %define 	tar_version	1.01-1.2.9
 Summary:	Multicomputer process monitoring utilities
